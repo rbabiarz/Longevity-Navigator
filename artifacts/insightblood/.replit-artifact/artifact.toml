@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "InsightBlood"
+version = "1.0.0"
+id = "artifacts/insightblood"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21523
+
+[services.development]
+run = "pnpm --filter @workspace/insightblood run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/insightblood", "run", "build" ]
+publicDir = "artifacts/insightblood/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21523"
+BASE_PATH = "/"
