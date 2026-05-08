@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Menu, X, Droplets } from "lucide-react";
+import { Menu, X, Droplets, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 const navLinks = [
   { href: "/features", label: "Features" },
@@ -11,6 +12,7 @@ const navLinks = [
 ];
 
 export default function Navigation() {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [location] = useLocation();
@@ -74,17 +76,36 @@ export default function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              className={scrolled || !isHome ? "" : "text-white hover:text-white hover:bg-white/10"}
-              data-testid="nav-signin"
-            >
-              Sign in
-            </Button>
-            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" data-testid="nav-getstarted">
-              Get started free
-            </Button>
+            {user ? (
+              <Link href="/dashboard">
+                <Button
+                  size="sm"
+                  className="bg-primary hover:bg-primary/90 text-white"
+                  data-testid="nav-dashboard"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 mr-1.5" />
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={scrolled || !isHome ? "" : "text-white hover:text-white hover:bg-white/10"}
+                    data-testid="nav-signin"
+                  >
+                    Sign in
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <Button size="sm" className="bg-primary hover:bg-primary/90 text-white" data-testid="nav-getstarted">
+                    Get started free
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -118,12 +139,27 @@ export default function Navigation() {
               </Link>
             ))}
             <div className="pt-2 border-t border-border flex flex-col gap-2">
-              <Button variant="ghost" size="sm" className="justify-start" data-testid="nav-mobile-signin">
-                Sign in
-              </Button>
-              <Button size="sm" className="bg-primary text-white" data-testid="nav-mobile-getstarted">
-                Get started free
-              </Button>
+              {user ? (
+                <Link href="/dashboard">
+                  <Button size="sm" className="bg-primary text-white w-full justify-start" data-testid="nav-mobile-dashboard">
+                    <LayoutDashboard className="w-3.5 h-3.5 mr-2" />
+                    Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="ghost" size="sm" className="justify-start w-full" data-testid="nav-mobile-signin">
+                      Sign in
+                    </Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button size="sm" className="bg-primary text-white w-full" data-testid="nav-mobile-getstarted">
+                      Get started free
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
