@@ -2,6 +2,10 @@
 
 # compiled output
 dist
+# Ship InsightBlood static build for GitHub Pages (root index redirects here)
+!artifacts/insightblood/dist/
+!artifacts/insightblood/dist/public/
+!artifacts/insightblood/dist/public/**
 tmp
 out-tsc
 *.tsbuildinfo
