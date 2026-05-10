@@ -26,8 +26,19 @@ export default function Login() {
     try {
       await login(email, password);
       navigate("/dashboard");
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const isNetwork =
+        err instanceof TypeError ||
+        (err instanceof Error &&
+          (/failed to fetch|networkerror|load failed/i.test(err.message) ||
+            err.name === "NetworkError"));
+      setError(
+        isNetwork
+          ? "Could not reach the API server. Start it on port 4000 (or set VITE_API_BASE_URL) and try again."
+          : message,
+      );
     } finally {
       setLoading(false);
     }
@@ -144,7 +155,9 @@ export default function Login() {
 
           <div className="mt-8 pt-6 border-t border-border/50">
             <p className="text-xs text-center text-muted-foreground">
-              Demo: enter any email + password to sign in.
+              Sign in with the email and password you used at signup. The API must be running (default{" "}
+              <code className="text-[0.7rem] bg-muted px-1 py-0.5 rounded">localhost:4000</code>
+              ).
             </p>
           </div>
         </div>
