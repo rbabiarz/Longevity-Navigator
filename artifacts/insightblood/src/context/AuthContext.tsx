@@ -21,16 +21,31 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
 
-const DEMO_USER: User = {
-  id: "u_demo123",
-  name: "Alex Chen",
-  email: "alex@example.com",
-  plan: "free",
-  joinedAt: "2024-11-01",
-  sex: "male",
-  dob: "1985-06-15",
-};
+async function apiRequest<T>(
+  path: string,
+  init?: RequestInit,
+): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+    ...init,
+  });
+  if (!response.ok) {
+    let message = "Request failed";
+    try {
+      const body = (await response.json()) as { error?: string };
+      if (body.error) message = body.error;
+    } catch {
+      // Ignore JSON parse failures for non-JSON errors.
+    }
+    throw new Error(message);
+  }
+  return (await response.json()) as T;
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -54,13 +69,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (email: string, _password: string) => {
-    await new Promise((r) => setTimeout(r, 900));
-    persist({ ...DEMO_USER, email });
+    const data = await apiRequest<{ user: User }>("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password: _password }),
+    });
+    persist(data.user);
   };
 
   const signup = async (name: string, email: string, _password: string) => {
-    await new Promise((r) => setTimeout(r, 1100));
-    persist({ ...DEMO_USER, name, email });
+    const data = await apiRequest<{ user: User }>("/api/auth/signup", {
+      method: "POST",
+      body: JSON.stringify({ name, email, password: _password }),
+    });
+    persist(data.user);
   };
 
   const logout = () => {
@@ -73,7 +94,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateProfile = (updates: Partial<Pick<User, "name" | "email" | "sex" | "dob">>) => {
-    if (user) persist({ ...user, ...updates });
+    if (!user) return;
+    apiRequest<{ user: User }>("/api/auth/me", {
+      method: "PATCH",
+      body: JSON.stringify({
+        id: user.id,
+        ...updates,
+      }),
+    })
+      .then((data) => persist(data.user))
+      .catch(() => {
+        // Keep the UX responsive even if API write fails.
+        persist({ ...user, ...updates });
+      });
   };
 
   return (

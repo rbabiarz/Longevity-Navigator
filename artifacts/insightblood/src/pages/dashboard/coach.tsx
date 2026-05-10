@@ -23,6 +23,12 @@ interface Message {
   citations: string[];
 }
 
+function getPubmedUrl(citation: string) {
+  const match = citation.match(/\d+/);
+  if (!match) return null;
+  return `https://pubmed.ncbi.nlm.nih.gov/${match[0]}/`;
+}
+
 export default function DashboardCoach() {
   const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>(COACH_MESSAGES);
@@ -132,13 +138,16 @@ export default function DashboardCoach() {
                 {msg.citations.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mt-1.5 pl-1">
                     {msg.citations.map((c) => (
-                      <span
+                      <a
                         key={c}
-                        className="inline-flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full"
+                        href={getPubmedUrl(c) ?? "#"}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full hover:bg-primary/20 transition-colors"
                       >
                         <BookOpen className="w-2.5 h-2.5" />
                         {c}
-                      </span>
+                      </a>
                     ))}
                   </div>
                 )}

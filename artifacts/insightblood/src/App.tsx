@@ -19,6 +19,7 @@ import DashboardMarkers from "@/pages/dashboard/markers";
 import DashboardCoach from "@/pages/dashboard/coach";
 import DashboardSettings from "@/pages/dashboard/settings";
 import DashboardBilling from "@/pages/dashboard/billing";
+import AICoachWidget from "@/components/AICoachWidget";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ function App() {
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <Router />
+            <AICoachWidget />
           </WouterRouter>
           <Toaster />
         </TooltipProvider>

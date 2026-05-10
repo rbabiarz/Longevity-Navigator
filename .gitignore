@@ -47,3 +47,6 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local InsightBlood SQLite dev database (schema lives in schema.sql)
+artifacts/insightblood/db/*.sqlite

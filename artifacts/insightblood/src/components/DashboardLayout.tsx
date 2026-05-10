@@ -6,7 +6,6 @@ import {
   Upload,
   Activity,
   MessageSquare,
-  CreditCard,
   Settings,
   LogOut,
   Droplets,
@@ -21,7 +20,6 @@ const navItems = [
   { href: "/dashboard/upload", icon: Upload, label: "Upload Labs", premiumOnly: false },
   { href: "/dashboard/markers", icon: Activity, label: "All Markers", premiumOnly: false },
   { href: "/dashboard/coach", icon: MessageSquare, label: "AI Coach", premiumOnly: true },
-  { href: "/dashboard/billing", icon: CreditCard, label: "Plan & Billing", premiumOnly: false },
   { href: "/dashboard/settings", icon: Settings, label: "Settings", premiumOnly: false },
 ];
 
@@ -64,7 +62,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           return (
             <Link
               key={href}
-              href={locked ? "/dashboard/billing" : href}
+              href={locked ? "/dashboard/settings?tab=billing" : href}
               onClick={() => setMobileOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 isActive
@@ -130,11 +128,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Droplets className="w-4 h-4 text-primary" />
             <span className="font-semibold text-foreground text-sm">InsightBlood</span>
           </div>
-          <Avatar className="w-7 h-7">
-            <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          <Link href="/dashboard/settings?tab=profile" aria-label="Open profile settings">
+            <Avatar className="w-7 h-7">
+              <AvatarFallback className="bg-primary/10 text-primary text-[11px] font-semibold">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
         </header>
 
         <main className="flex-1 overflow-auto">{children}</main>

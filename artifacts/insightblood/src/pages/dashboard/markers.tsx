@@ -146,6 +146,8 @@ export default function DashboardMarkers() {
     const matchRisk = riskFilter === "all" || m.risk === riskFilter;
     return matchSearch && matchCat && matchRisk;
   });
+  const desktopColumnLayout = "sm:grid-cols-[minmax(0,1fr)_5.5rem_6.5rem_7rem_6.5rem]";
+  const mobileColumnLayout = "grid-cols-[minmax(0,1fr)_6.25rem_5.5rem]";
 
   return (
     <DashboardLayout>
@@ -200,7 +202,9 @@ export default function DashboardMarkers() {
         </div>
 
         <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="grid grid-cols-[1fr_auto_auto_auto_auto] gap-px text-xs font-semibold uppercase tracking-wide text-muted-foreground bg-muted/50 border-b border-border">
+          <div
+            className={`grid ${mobileColumnLayout} ${desktopColumnLayout} gap-px text-xs font-semibold uppercase tracking-wide text-muted-foreground bg-muted/50 border-b border-border`}
+          >
             <div className="bg-muted/40 px-4 py-3">Marker</div>
             <div className="bg-muted/40 px-4 py-3 text-right">Current</div>
             <div className="bg-muted/40 px-4 py-3 text-center hidden sm:block">Optimal</div>
@@ -217,7 +221,7 @@ export default function DashboardMarkers() {
               <button
                 key={marker.id}
                 onClick={() => setSelected(marker)}
-                className={`w-full grid grid-cols-[1fr_auto_auto_auto_auto] items-center text-left hover:bg-muted/30 transition-colors ${
+                className={`w-full grid ${mobileColumnLayout} ${desktopColumnLayout} items-center text-left hover:bg-muted/30 transition-colors ${
                   i < filtered.length - 1 ? "border-b border-border/50" : ""
                 }`}
                 data-testid={`marker-row-${marker.id}`}
