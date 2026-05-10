@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Droplets, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { DEMO_AUTH } from "@/lib/auth-mode";
 
 export default function Login() {
   const { login } = useAuth();
@@ -36,7 +37,7 @@ export default function Login() {
             err.name === "NetworkError"));
       setError(
         isNetwork
-          ? "Could not reach the API server. Start it on port 4000 (or set VITE_API_BASE_URL) and try again."
+          ? "Could not reach the API server. Start it (default port 5000) or set VITE_API_BASE_URL."
           : message,
       );
     } finally {
@@ -155,9 +156,18 @@ export default function Login() {
 
           <div className="mt-8 pt-6 border-t border-border/50">
             <p className="text-xs text-center text-muted-foreground">
-              Sign in with the email and password you used at signup. The API must be running (default{" "}
-              <code className="text-[0.7rem] bg-muted px-1 py-0.5 rounded">localhost:4000</code>
-              ).
+              {DEMO_AUTH ? (
+                <>
+                  Demo mode: use any email and password. Nothing is sent to a server; your session stays in this
+                  browser.
+                </>
+              ) : (
+                <>
+                  Sign in with the email and password from signup. The API should be running at{" "}
+                  <code className="text-[0.7rem] bg-muted px-1 py-0.5 rounded">localhost:5000</code> unless
+                  VITE_API_BASE_URL is set.
+                </>
+              )}
             </p>
           </div>
         </div>

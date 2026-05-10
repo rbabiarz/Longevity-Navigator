@@ -38,8 +38,19 @@ export default function Signup() {
     try {
       await signup(name, email, password);
       navigate("/dashboard");
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const isNetwork =
+        err instanceof TypeError ||
+        (err instanceof Error &&
+          (/failed to fetch|networkerror|load failed/i.test(err.message) ||
+            err.name === "NetworkError"));
+      setError(
+        isNetwork
+          ? "Could not reach the API server. Start it (default port 5000) or set VITE_API_BASE_URL."
+          : message,
+      );
     } finally {
       setLoading(false);
     }

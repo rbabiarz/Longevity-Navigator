@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { DEMO_AUTH } from "@/lib/auth-mode";
 
 export interface User {
   id: string;
@@ -21,7 +22,30 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
+/** Default matches Replit / local api-server when PORT=5000 */
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:5000";
+
+function demoUserId(email: string): string {
+  const normalized = email.toLowerCase();
+  let h = 5381;
+  for (let i = 0; i < normalized.length; i++) {
+    h = Math.imul(h, 33) ^ normalized.charCodeAt(i);
+  }
+  return `demo-${(h >>> 0).toString(16)}`;
+}
+
+function buildDemoUser(name: string, email: string): User {
+  const today = new Date().toISOString().slice(0, 10);
+  return {
+    id: demoUserId(email),
+    name: name.trim() || email.split("@")[0] || "Member",
+    email: email.toLowerCase().trim(),
+    plan: "free",
+    joinedAt: today,
+    sex: "male",
+    dob: "1985-06-15",
+  };
+}
 
 async function apiRequest<T>(
   path: string,
@@ -69,6 +93,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (email: string, _password: string) => {
+    if (DEMO_AUTH) {
+      persist(buildDemoUser(email.split("@")[0] || "Member", email));
+      return;
+    }
     const data = await apiRequest<{ user: User }>("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password: _password }),
@@ -77,6 +105,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signup = async (name: string, email: string, _password: string) => {
+    if (DEMO_AUTH) {
+      persist(buildDemoUser(name, email));
+      return;
+    }
     const data = await apiRequest<{ user: User }>("/api/auth/signup", {
       method: "POST",
       body: JSON.stringify({ name, email, password: _password }),
