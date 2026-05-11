@@ -112,14 +112,16 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-base font-medium w-full sm:w-auto"
-              data-testid="hero-cta-primary"
-            >
-              Start for free
-              <ArrowRight className="ml-2 w-4 h-4" />
-            </Button>
+            <Link href="/dashboard">
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-base font-medium w-full sm:w-auto"
+                data-testid="hero-cta-primary"
+              >
+                Go to Dashboard
+                <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
             <Link href="/features">
               <Button
                 variant="outline"
@@ -459,58 +461,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing teaser */}
-      <section className="gradient-teal py-24">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="mb-6 bg-white/10 text-white/80 border-white/20 text-xs font-medium tracking-wide">Pricing</Badge>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Free forever, with full insight on your two most recent tests
-          </h2>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-12">
-            Safety information is never paywalled. The premium hook is time depth — full longitudinal history, intervention timelines, and the AI Longevity Coach.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto mb-10">
-            {[
-              { tier: "Free", price: "$0", features: ["Unlimited uploads", "Your 2 most recent tests", "Full risk classifications", "Evidence-graded recommendations", "PubMed citations", "GP finder on high-risk results"] },
-              { tier: "Premium", price: "$50/yr", features: ["Everything in Free", "Full longitudinal history", "All historical trends", "Intervention timelines", "Doctor-prep packets", "AI Longevity Coach", "Lab connector integrations", "Recheck reminders"] },
-            ].map((plan, i) => (
-              <div
-                key={i}
-                className={`rounded-2xl p-6 text-left ${
-                  i === 1 ? "bg-white text-foreground" : "bg-white/10 border border-white/20 text-white"
-                }`}
-                data-testid={`pricing-card-${plan.tier.toLowerCase()}`}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className={`font-serif font-bold text-xl ${i === 1 ? "text-foreground" : "text-white"}`}>{plan.tier}</h3>
-                  <span className={`font-bold text-2xl ${i === 1 ? "text-primary" : "text-white"}`}>{plan.price}</span>
-                </div>
-                <ul className="space-y-2">
-                  {plan.features.map((f, j) => (
-                    <li key={j} className="flex items-center gap-2 text-sm">
-                      <CheckCircle className={`w-4 h-4 flex-shrink-0 ${i === 1 ? "text-primary" : "text-white/70"}`} />
-                      <span className={i === 1 ? "text-foreground/80" : "text-white/80"}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  className={`w-full mt-6 ${i === 1 ? "bg-primary text-white hover:bg-primary/90" : "bg-white/20 text-white hover:bg-white/30 border border-white/30"}`}
-                  data-testid={`pricing-cta-${plan.tier.toLowerCase()}`}
-                >
-                  {i === 1 ? "Start Premium" : "Get started free"}
-                </Button>
-              </div>
-            ))}
-          </div>
-          <Link href="/pricing">
-            <Button variant="link" className="text-white/60 hover:text-white" data-testid="pricing-details-link">
-              See full feature comparison
-              <ArrowRight className="ml-1 w-4 h-4" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-
       {/* Trust */}
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
@@ -546,11 +496,12 @@ export default function Home() {
           <p className="text-white/60 text-lg mb-10">
             Upload your first PDF and see your markers in context within minutes.
           </p>
-          <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-10 py-6 text-base font-medium" data-testid="final-cta">
-            Start for free — no credit card required
-            <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-          <p className="text-white/30 text-xs mt-4">Free forever on your 2 most recent tests. $50/yr for full history.</p>
+          <Link href="/dashboard">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-white px-10 py-6 text-base font-medium" data-testid="final-cta">
+              Go to Dashboard
+              <ArrowRight className="ml-2 w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </section>
 

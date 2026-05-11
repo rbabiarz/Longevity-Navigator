@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { useAuth } from "@/context/AuthContext";
+import { MarkerDetail } from "@/pages/dashboard/markers";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -78,6 +79,7 @@ export default function DashboardOverview() {
   const [deleteTargetIds, setDeleteTargetIds] = useState<string[]>([]);
   const lastUpload = uploads[0];
   const [activeFilter, setActiveFilter] = useState<OverviewFilter>("tracked");
+  const [selectedMarker, setSelectedMarker] = useState<typeof MARKERS[0] | null>(null);
   const statCards: {
     key: OverviewFilter;
     label: string;
@@ -158,6 +160,7 @@ export default function DashboardOverview() {
         : "Key markers";
 
   return (
+    <>
     <DashboardLayout>
       <div className="px-6 py-8 max-w-5xl mx-auto">
         <div className="flex items-start justify-between mb-8 gap-4 flex-wrap">
@@ -230,7 +233,7 @@ export default function DashboardOverview() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {filteredOverviewMarkers.map((marker) => (
-              <Link key={marker.id} href={`/dashboard/markers`} className="block rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-sm transition-all group">
+              <button key={marker.id} onClick={() => setSelectedMarker(marker)} className="text-left block w-full rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-sm transition-all group">
                   <div className="flex items-start justify-between mb-3">
                     <div>
                       <p className="text-sm font-semibold text-foreground">{marker.shortName}</p>
@@ -251,7 +254,7 @@ export default function DashboardOverview() {
                       {getTrendIcon(marker.trend)} {marker.trend}
                     </span>
                   </div>
-              </Link>
+              </button>
               ))}
             </div>
           )}
@@ -396,5 +399,7 @@ export default function DashboardOverview() {
         </AlertDialogContent>
       </AlertDialog>
     </DashboardLayout>
+    {selectedMarker && <MarkerDetail marker={selectedMarker} onClose={() => setSelectedMarker(null)} />}
+    </>
   );
 }

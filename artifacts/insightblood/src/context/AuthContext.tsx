@@ -71,20 +71,22 @@ async function apiRequest<T>(
   return (await response.json()) as T;
 }
 
+const DEFAULT_USER: User = {
+  id: "free-user",
+  name: "Robert",
+  email: "rbabiarz@gmail.com",
+  plan: "premium",
+  joinedAt: "2024-01-01",
+  sex: "male",
+  dob: "1985-06-15",
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(DEFAULT_USER);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("insightblood_user");
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {
-        localStorage.removeItem("insightblood_user");
-      }
-    }
-    setIsLoading(false);
+    // Free site: always signed in as default user
   }, []);
 
   const persist = (u: User) => {

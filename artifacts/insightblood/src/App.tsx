@@ -7,12 +7,9 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Features from "@/pages/features";
 import Science from "@/pages/science";
-import Pricing from "@/pages/pricing";
 import About from "@/pages/about";
 import Login from "@/pages/login";
 import Signup from "@/pages/signup";
-import Checkout from "@/pages/checkout";
-import CheckoutSuccess from "@/pages/checkout-success";
 import DashboardOverview from "@/pages/dashboard/index";
 import DashboardUpload from "@/pages/dashboard/upload";
 import DashboardMarkers from "@/pages/dashboard/markers";
@@ -30,16 +27,9 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/features" component={Features} />
       <Route path="/science" component={Science} />
-      <Route path="/pricing" component={Pricing} />
       <Route path="/about" component={About} />
-
-      {/* Auth */}
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
-
-      {/* Checkout */}
-      <Route path="/checkout" component={Checkout} />
-      <Route path="/checkout/success" component={CheckoutSuccess} />
 
       {/* Member dashboard */}
       <Route path="/dashboard" component={DashboardOverview} />

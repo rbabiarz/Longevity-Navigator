@@ -25,7 +25,7 @@ const RISK_FILTERS: { label: string; value: RiskLevel | "all" }[] = [
   { label: "Elevated", value: "elevated" },
 ];
 
-function MarkerDetail({ marker, onClose }: { marker: typeof MARKERS[0]; onClose: () => void }) {
+export function MarkerDetail({ marker, onClose }: { marker: typeof MARKERS[0]; onClose: () => void }) {
   const riskLineColor =
     marker.risk === "optimal" ? "#059669" : marker.risk === "borderline" ? "#d97706" : "#ea580c";
 
